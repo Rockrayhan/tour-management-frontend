@@ -12,7 +12,7 @@ const axiosBaseQuery =
       method?: AxiosRequestConfig['method']
       data?: AxiosRequestConfig['data']
       params?: AxiosRequestConfig['params']
-      headers?: AxiosRequestConfig['headers']
+    headers?: AxiosRequestConfig['headers']
     },
     unknown,
     unknown

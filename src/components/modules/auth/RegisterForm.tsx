@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import {
   Form,
@@ -48,7 +48,7 @@ export function RegisterForm({
 
 
   const [register] = useRegisterMutation();
-
+  const navigate = useNavigate() ;
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -69,7 +69,8 @@ export function RegisterForm({
     try {
       const result = await register(userInfo).unwrap() ;
       console.log(result);
-      toast.success("yeeee ki moja...!!")
+      toast.success("Registration Successfull. Verify your email")
+      navigate("/verify")
     } catch (error) {
       console.error(error);
     }
