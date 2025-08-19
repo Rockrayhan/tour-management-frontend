@@ -31,7 +31,7 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
-  const { data } = useUserInfoQuery(undefined);
+  const { data, isLoading } = useUserInfoQuery(undefined);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
   const email = data?.data?.email;
@@ -135,23 +135,30 @@ export default function Navbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <ModeToggle />
-
-          {email ? (
-            <Button
-              onClick={handleLogout}
-              variant="destructive"
-              asChild
-              size="sm"
-              className="text-sm"
-            >
-              <Link to="/login"> Logout </Link>
-            </Button>
+          {isLoading ? (
+            <> Loading... </>
           ) : (
-            <Button size="sm" className="text-sm">
-              <Link to="/login"> Login </Link>
-            </Button>
+            <>
+            <small> {email} </small>
+              {email ? (
+                <Button
+                  onClick={handleLogout}
+                  variant="destructive"
+                  asChild
+                  size="sm"
+                  className="text-sm"
+                >
+                  <Link to="/login"> Logout </Link>
+                </Button>
+              ) : (
+                <Button size="sm" className="text-sm">
+                  <Link to="/login"> Login </Link>
+                </Button>
+              )}
+            </>
           )}
+          
+          <ModeToggle />
         </div>
       </div>
     </header>
