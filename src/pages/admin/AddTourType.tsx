@@ -1,4 +1,7 @@
-import { useGetTourTypeQuery } from "@/redux/features/tour/tour.api";
+import {
+  useDeleteTourTypeMutation,
+  useGetTourTypeQuery,
+} from "@/redux/features/tour/tour.api";
 import {
   Table,
   TableBody,
@@ -7,25 +10,39 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {  Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AddTourTypeModal } from "@/components/modules/tour/AddTourTypeModal";
 import { UpdateTourTypeModal } from "@/components/modules/tour/UpdateTourTypeModal";
-
+import { DeleteConfirmation } from "@/components/ui/DeleteConfirmation";
+import { toast } from "sonner";
 
 const AddTourType = () => {
   const { data } = useGetTourTypeQuery(undefined);
-  console.log(data);
-  
+  const [deleteTourType] = useDeleteTourTypeMutation();
+
+  const handleRemoveTourType = async (id: string) => {
+    const taostId = toast.loading("removing...");
+
+    try {
+      const res = await deleteTourType({ id }).unwrap();
+      if (res.success) {
+        toast.success("Tour Type Deleted.", { id: taostId });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
-
-   <AddTourTypeModal/>
-
+      <AddTourTypeModal />
 
       <div className="max-w-4xl mx-auto mt-8 border-1 border-slate-400">
-      <h1 className="text-center py-4"> All Tour Types {data?.data?.length} </h1>
+        <h1 className="text-center py-4">
+          {" "}
+          All Tour Types {data?.data?.length}{" "}
+        </h1>
         <Table>
           <TableHeader className="bg-slate-800">
             <TableRow>
@@ -40,8 +57,14 @@ const AddTourType = () => {
                   {item.name}
                 </TableCell>
                 <TableCell className="flex gap-3">
-                    <Button className="bg-red-500"> <Trash2 /> </Button>
-                    <UpdateTourTypeModal id={item._id} currentName={item.name}/>
+                  <DeleteConfirmation
+                    onConfirm={() => handleRemoveTourType(item._id)}
+                  >
+                    <Button size="icon" className="bg-red-500">
+                      <Trash2 />
+                    </Button>
+                  </DeleteConfirmation>
+                  <UpdateTourTypeModal id={item._id} currentName={item.name} />
                 </TableCell>
               </TableRow>
             ))}
