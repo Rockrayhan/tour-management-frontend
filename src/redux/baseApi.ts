@@ -8,6 +8,6 @@ export const baseApi = createApi({
   // credentials : include - is like credential true ( to get data in cookie ) 
   // baseQuery: fetchBaseQuery({ baseUrl: config.baseUrl , credentials: "include" }),
   baseQuery: axiosBaseQuery(),
-  tagTypes:['USER'],
+  tagTypes:['USER', 'TOUR'],
   endpoints: () => ({}),
 });
